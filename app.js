@@ -16,5 +16,6 @@ app.use("/login", require("./routes/login.routes"))
 app.use("/register", require("./routes/register.routes"))
 
 app.use("/api/user", require("./routes/user.routes"))
+app.use("/api/note",require("./routes/note.routes") )
 
 module.exports = app;

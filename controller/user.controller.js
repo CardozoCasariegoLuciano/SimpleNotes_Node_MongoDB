@@ -59,7 +59,7 @@ async function editAUser (req, res){
 		res.json({Mensaje:` El usuario con el id ${id} no existe`})
 	}else{
 
-		const {error, values} = userValidation.validate({name, password})
+		const {error, value} = userValidation.validate({name, password})
 
 		if(!error){
 			user.name = name

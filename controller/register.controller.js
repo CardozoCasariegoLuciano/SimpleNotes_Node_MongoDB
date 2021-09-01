@@ -15,9 +15,9 @@ async function register(req,res){
 		return res.status(400).json({Mensaje: "Ya existe un usuario con ese mail"})
 	}
 
-	const {err, val} = userValidation.validate({name, email, password})
+	const {error, value} = userValidation.validate({name, password, email})
 
-	if(!err){
+	if(!error){
 		const newUser = User({
 			name,
 			email,
@@ -41,7 +41,7 @@ async function register(req,res){
 		})
 
 	}else{
-		res.status(400).json({Mensaje: "Error con los datos ingresados", err})
+		res.status(400).json({Mensaje: "Error con los datos ingresados", error})
 	}
 }
 
