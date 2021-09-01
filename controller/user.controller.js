@@ -1,10 +1,12 @@
 const User = require("../models/user.model")
 const userValidation = require("./validations/user.validation")
 const objectId = require("mongoose").Types.ObjectId
+const bcrypt = require("bcrypt")
+
 
 async function getAllUsers(req, res){
 
-	const allUsers = await User.find()
+	const allUsers = await User.find().select({password: 0})
 	res.json(allUsers)
 }
 
@@ -16,7 +18,7 @@ async function getASingleUser(req, res){
 		return res.status(400).json({Mensaje : "Ingrese un ID valido"})	
 	}
 
-	const user = await User.findById(id)
+	const user = await User.findById(id).select({password:0})
 	if(!user){
 		res.json({Mensaje:` El usuario con el id ${id} no existe`})
 	}else{
@@ -24,32 +26,56 @@ async function getASingleUser(req, res){
 	}
 }
 
-async function postANewUser(req, res){
-	const {name, password, email} = req.body;
 
-	const exist = await User.findOne({email})
+async function deleteAUser(req, res){
 
-	if(!exist){
+	const id = req.params.id
 
-		const {error, value} = userValidation.validate({name, password ,email})
+	if(!objectId.isValid(id)){
+		return res.status(400).json({Mensaje : "Ingrese un ID valido"})	
+	}
+
+	const user = await User.findById(id)
+	if(!user){
+		res.json({Mensaje:` El usuario con el id ${id} no existe`})
+	}else{
+		await User.findByIdAndDelete(id)
+		res.json({Mensaje: "Usuario eliminado correctamente", Usualio_Elimminado:user})
+	}
+}
+
+
+async function editAUser (req, res){
+
+	const id = req.params.id
+	const {name, password} = req.body
+
+	if(!objectId.isValid(id)){
+		return res.status(400).json({Mensaje : "Ingrese un ID valido"})	
+	}
+
+	const user = await User.findById(id)
+	if(!user){
+		res.json({Mensaje:` El usuario con el id ${id} no existe`})
+	}else{
+
+		const {error, values} = userValidation.validate({name, password})
 
 		if(!error){
-			const newUser = new User(value)
-			await newUser.save()	
-			res.json({Mensaje: "Usuario agregado exitosamente", Data: newUser})
-
+			user.name = name
+			user.password = bcrypt.hashSync(password,10)
+			
+			await user.save()
+			res.json({Mensaje: "Usuario modificado correctamente", Usualio_Modificado:user.email})
 		}else{
 			res.status(400).json({ Mensaje : "Error con los datos ingresados" })
 		}
-
-	}else{
-		res.status(400).json({ Mensaje : "El mail seleccionado ya existe" })
 	}
-
 }
 
 module.exports = {
 	getAllUsers,
 	getASingleUser,
-	postANewUser,
+	deleteAUser,
+	editAUser,
 }

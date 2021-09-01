@@ -1,15 +1,15 @@
 const routes = require("express").Router();
-const {getAllUsers, getASingleUser, postANewUser} = require("../controller/user.controller")
+const {getAllUsers, getASingleUser,  deleteAUser, editAUser} = require("../controller/user.controller")
+const token_validation = require("../middleware/token_validation")
 
 
 
 routes.route("/")
-	.get(getAllUsers)
-	.post(postANewUser)
-
+	.get(token_validation, getAllUsers)
 
 routes.route("/:id")
-	.get(getASingleUser)
-
+	.get(token_validation, getASingleUser)
+	.delete(token_validation, deleteAUser)
+	.put(token_validation, editAUser)
 
 module.exports = routes;

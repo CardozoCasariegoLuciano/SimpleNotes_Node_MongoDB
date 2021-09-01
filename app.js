@@ -12,8 +12,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
 //routes
+app.use("/login", require("./routes/login.routes"))
+app.use("/register", require("./routes/register.routes"))
 
-//app.use("/register", require("./routes/"))
 app.use("/api/user", require("./routes/user.routes"))
 
 module.exports = app;
