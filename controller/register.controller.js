@@ -7,12 +7,12 @@ async function register(req,res){
 	const {name, email, password, repited_password} = req.body
 
 	if(password != repited_password){
-		return res.status(400).json({Mensaje: "Las contraceñas no coinciden"})
+		return res.status(200).json({Mensaje: "Las contraceñas no coinciden"})
 	}
 
 	const exist = await User.findOne({email})
 	if(exist){
-		return res.status(400).json({Mensaje: "Ya existe un usuario con ese mail"})
+		return res.status(200).json({Mensaje: "Ya existe un usuario con ese mail"})
 	}
 
 	const {error, value} = userValidation.validate({name, password, email})
@@ -36,12 +36,12 @@ async function register(req,res){
 
 		res.json({
 			Mensaje: "Registrado correcamente",
-			Usuario: {name: user.name, email:user.email},
+			Usuario: {name: user.name, email:user.email, _id: user._id},
 			Token: token
 		})
 
 	}else{
-		res.status(400).json({Mensaje: "Error con los datos ingresados", error})
+		res.status(200).json({Mensaje: "Error con los datos ingresados", error})
 	}
 }
 

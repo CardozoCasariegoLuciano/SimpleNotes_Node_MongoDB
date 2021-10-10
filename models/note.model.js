@@ -10,7 +10,7 @@ const noteSchema = new Schema({
 	},
 	publishedOn:{
 		type: Date,
-		default: Date.now(),
+		default: Date.now,
 	},
 	author: {
 		type: Schema.Types.ObjectId, ref:"User"
