@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "mon": "nodemon index.js"
+    "test": "NODE_ENV=test jest --detectOpenHandles ",
+    "mon": "NODE_ENV=development nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +18,9 @@
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.3"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "supertest": "^6.1.6"
   }
 }
